@@ -214,6 +214,12 @@ Para añadir nuevas funcionalidades:
 3. Actualizar logs de auditoría
 4. Documentar cambios
 
+## ¿Cómo la aplicación realizada reduce la deuda técnica?
+
+En Gestión Aprendices la deuda técnica se reduce desde la misma forma en que está organizado el proyecto. Por ejemplo, cada módulo (usuarios, aprendices, instructores, riesgos, observaciones) está separado dentro de Dashboard y no todo revuelto en un solo archivo, entonces si después hay que corregir algo de "gestionRiesgos" no toca tocar el resto del sistema y arriesgar a romper otras partes. Además, el CRUD está centralizado en un solo archivo (crud.php), o sea que las operaciones contra la base de datos no están repetidas por todos lados; si algo cambia en la lógica de guardar o actualizar datos, se corrige en un solo lugar y no en diez archivos distintos, que es justo lo que genera deuda cuando un proyecto crece.
+También ayuda que la configuración de la base de datos esté aparte en db.php y se maneje por variables de entorno (.env) en vez de quedar quemada en el código; así si el día de mañana cambia el usuario, la contraseña o el nombre de la base de datos, no hay que ir a buscar esos datos por todo el proyecto. Lo mismo pasa con Docker y docker-compose: como todo el entorno (PHP, Apache, MySQL) queda definido en archivos de configuración, cualquiera puede levantar el proyecto igual en su máquina sin tener que instalar y configurar todo a mano, lo que evita esos problemas típicos de "en mi PC sí funciona" que después se acumulan como deuda.
+Por el lado de seguridad, usar contraseñas hasheadas, consultas preparadas para evitar inyección SQL, control de acceso por roles (RBAC) y protección CSRF, evita que esas vulnerabilidades queden pendientes para corregir después, que es una de las formas más comunes de deuda técnica en un sistema. Y el módulo de auditoría le da observabilidad al sistema, porque queda un registro de quién hizo qué y cuándo, entonces si algo falla se puede detectar a tiempo en vez de dejar que el error se acumule sin que nadie se dé cuenta. En resumen, la combinación de una estructura modular, configuración separada del código, uso de Docker y buenas prácticas de seguridad y auditoría es lo que hace que este proyecto no vaya acumulando "parches" desordenados con el tiempo.
+
 ## Soporte
 
 Para reportar problemas, sugerencias o preguntas, por favor crea un [issue](https://github.com/JuanManuelCM3331/New-Gestion-Aprendices/issues) en el repositorio.
