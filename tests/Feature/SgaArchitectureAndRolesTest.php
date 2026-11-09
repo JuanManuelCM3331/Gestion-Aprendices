@@ -30,11 +30,11 @@ class SgaArchitectureAndRolesTest extends TestCase
     {
         $this->get(route('landing'))
             ->assertOk()
-            ->assertSee('Patrón MVC Enriquecido con Arquitectura en Capas');
+            ->assertSee('Sistema de Gestión de');
 
         $this->get(route('login'))
             ->assertOk()
-            ->assertSee('Autenticación Centralizada');
+            ->assertSee('Iniciar Sesión');
     }
 
     public function test_bienestar_can_adjust_risk_parameters_and_block_unresolved_case_deletion(): void
@@ -44,7 +44,7 @@ class SgaArchitectureAndRolesTest extends TestCase
         $this->actingAs($bienestar)
             ->get(route('bienestar.dashboard'))
             ->assertOk()
-            ->assertSee('Monitoreo Predictivo y Semáforo');
+            ->assertSee('Coordinación de Bienestar');
 
         // 1. Ajustar pesos del algoritmo sin tocar código
         $params = RiskParameter::pluck('weight', 'id')->map(fn ($w) => $w + 1.0)->toArray();
@@ -116,7 +116,7 @@ class SgaArchitectureAndRolesTest extends TestCase
         $this->actingAs($admin)
             ->get(route('admin.dashboard'))
             ->assertOk()
-            ->assertSee('Cadena de Auditoría Inmutable Verificada');
+            ->assertSee('Registro de Auditoría Inmutable');
 
         /** @var AuditService $auditService */
         $auditService = app(AuditService::class);

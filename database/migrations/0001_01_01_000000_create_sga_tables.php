@@ -6,12 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        // 1. Tablas Maestras (Gobernanza del Administrador)
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('username')->unique();
+            $table->string('email')->unique();
+            $table->enum('role', ['admin', 'bienestar', 'instructor', 'aprendiz'])->default('aprendiz');
+            $table->json('permissions')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamp('last_login_at')->nullable();
+            $table->string('last_login_ip', 45)->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
         Schema::create('sedes', function (Blueprint $table) {
             $table->id();
             $table->string('code', 20)->unique();
@@ -24,7 +36,7 @@ return new class extends Migration
 
         Schema::create('academic_periods', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 20)->unique(); // Ej: 2026-I, 2026-II
+            $table->string('code', 20)->unique();
             $table->string('name');
             $table->date('start_date');
             $table->date('end_date');
@@ -46,7 +58,7 @@ return new class extends Migration
 
         Schema::create('fichas', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 30)->unique(); // Número de ficha (ej. 2847101)
+            $table->string('code', 30)->unique();
             $table->foreignId('training_program_id')->constrained('training_programs')->cascadeOnDelete();
             $table->foreignId('sede_id')->constrained('sedes')->cascadeOnDelete();
             $table->foreignId('academic_period_id')->constrained('academic_periods')->cascadeOnDelete();
@@ -56,7 +68,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 2. Perfiles de Instructores y Asignación de Carga Lectiva / Fichas
         Schema::create('instructor_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained('users')->cascadeOnDelete();
@@ -72,14 +83,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('ficha_id')->constrained('fichas')->cascadeOnDelete();
             $table->foreignId('instructor_profile_id')->constrained('instructor_profiles')->cascadeOnDelete();
-            $table->string('competency'); // Competencia o asignatura dictada
-            $table->string('schedule');   // Ej: Lun-Mié 07:00 - 12:00
+            $table->string('competency');
+            $table->string('schedule');
             $table->unsignedSmallInteger('hours_assigned')->default(12);
-            $table->boolean('is_lead')->default(false); // Vocero / Líder de ficha
+            $table->boolean('is_lead')->default(false);
             $table->timestamps();
         });
 
-        // 3. Perfiles de Aprendices y Monitoreo Predictivo de Riesgo
         Schema::create('apprentice_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained('users')->cascadeOnDelete();
@@ -87,25 +97,22 @@ return new class extends Migration
             $table->string('document_type', 10)->default('CC');
             $table->string('document_number', 30)->nullable();
             $table->string('phone', 30)->nullable();
-            $table->decimal('attendance_rate', 5, 2)->default(100.00); // % Asistencia
-            $table->decimal('academic_average', 4, 2)->default(4.50);  // Promedio 0.0 - 5.0
+            $table->decimal('attendance_rate', 5, 2)->default(100.00);
+            $table->decimal('academic_average', 4, 2)->default(4.50);
             $table->unsignedInteger('absences_count')->default(0);
             $table->enum('socioeconomic_stratum', ['1', '2', '3', '4', '5', '6'])->default('2');
             $table->boolean('has_connectivity_issues')->default(false);
             $table->boolean('has_family_vulnerability')->default(false);
-
-            // Vectores de Riesgo Predictivo (0 - 100) y Semáforo Automático
-            $table->decimal('dropout_risk_score', 5, 2)->default(0.00);      // Riesgo Deserción
-            $table->decimal('academic_risk_score', 5, 2)->default(0.00);     // Riesgo Académico
-            $table->decimal('psychosocial_risk_score', 5, 2)->default(0.00); // Riesgo Psicosocial
-            $table->decimal('global_risk_score', 5, 2)->default(0.00);       // Puntaje Consolidado
-            $table->enum('risk_level', ['bajo', 'medio', 'alto'])->default('bajo'); // Semáforo: verde, amarillo, rojo
+            $table->decimal('dropout_risk_score', 5, 2)->default(0.00);
+            $table->decimal('academic_risk_score', 5, 2)->default(0.00);
+            $table->decimal('psychosocial_risk_score', 5, 2)->default(0.00);
+            $table->decimal('global_risk_score', 5, 2)->default(0.00);
+            $table->enum('risk_level', ['bajo', 'medio', 'alto'])->default('bajo');
             $table->enum('academic_status', ['En Formación', 'Condicionado', 'En Plan de Mejora', 'Aplazado', 'Desertor'])->default('En Formación');
             $table->timestamp('last_risk_calculated_at')->nullable();
             $table->timestamps();
         });
 
-        // 4. Parámetros Dinámicos del Algoritmo de Valoración de Riesgo (Bienestar)
         Schema::create('risk_parameters', function (Blueprint $table) {
             $table->id();
             $table->string('code', 50)->unique();
@@ -119,7 +126,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 5. Observaciones, Novedades, Inasistencias y Llamados de Atención (Instructor / Aprendiz)
         Schema::create('observations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('apprentice_profile_id')->constrained('apprentice_profiles')->cascadeOnDelete();
@@ -127,7 +133,7 @@ return new class extends Migration
             $table->foreignId('author_id')->nullable()->constrained('users')->nullOnDelete();
             $table->enum('type', ['positiva', 'academica', 'disciplinaria', 'inasistencia', 'llamado_atencion'])->default('academica');
             $table->enum('category', ['desercion', 'academico', 'psicosocial'])->default('academico');
-            $table->unsignedTinyInteger('severity')->default(2); // 1 (Leve/Reconocimiento) a 5 (Crítico)
+            $table->unsignedTinyInteger('severity')->default(2);
             $table->string('title');
             $table->text('description');
             $table->boolean('is_massive')->default(false);
@@ -137,7 +143,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 6. Soportes y Evidencias del Aprendiz (Excusas médicas, descargos, documentos)
         Schema::create('evidence_supports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('observation_id')->constrained('observations')->cascadeOnDelete();
@@ -155,7 +160,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 7. Casos de Bienestar, Rutas de Atención y Compromisos (Trazabilidad con bloqueo de borrado)
         Schema::create('welfare_cases', function (Blueprint $table) {
             $table->id();
             $table->string('case_code', 30)->unique();
@@ -168,9 +172,9 @@ return new class extends Migration
             $table->enum('status', ['abierto', 'en_ruta', 'compromiso_activo', 'en_seguimiento', 'resuelto'])->default('abierto');
             $table->string('title');
             $table->text('initial_diagnosis');
-            $table->text('intervention_route')->nullable(); // Ruta de atención definida
-            $table->text('commitments')->nullable();        // Compromisos del aprendiz
-            $table->text('improvement_plan')->nullable();   // Plan de mejora
+            $table->text('intervention_route')->nullable();
+            $table->text('commitments')->nullable();
+            $table->text('improvement_plan')->nullable();
             $table->text('resolution_notes')->nullable();
             $table->date('due_date')->nullable();
             $table->timestamp('resolved_at')->nullable();
@@ -181,13 +185,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('welfare_case_id')->constrained('welfare_cases')->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->string('stage'); // Ej: Citación, Entrevista Psicosocial, Firma de Compromiso, Cierre
+            $table->string('stage');
             $table->text('notes');
             $table->date('next_followup_date')->nullable();
             $table->timestamps();
         });
 
-        // 8. Notificaciones Internas de la Plataforma
         Schema::create('platform_notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
@@ -200,7 +203,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 9. Auditoría Inmutable (Con IP, User-Agent, Diff y Hash Criptográfico Encadenado)
         Schema::create('audit_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->index();
@@ -221,9 +223,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('audit_logs');
@@ -240,5 +239,6 @@ return new class extends Migration
         Schema::dropIfExists('training_programs');
         Schema::dropIfExists('academic_periods');
         Schema::dropIfExists('sedes');
+        Schema::dropIfExists('users');
     }
 };
