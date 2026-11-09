@@ -183,7 +183,7 @@
                 <a href="#servicios" class="hover:text-white transition-colors">Servicios</a>
                 <a href="#roles" class="hover:text-white transition-colors">Roles</a>
                 <a href="#contacto" class="hover:text-white transition-colors">Contacto</a>
-                <a href="/App/Modules/Dashboard/dashboard.php"
+                <a href="dashboard.php"
                     class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors">
                     Ingresar al sistema →
                 </a>
@@ -203,7 +203,7 @@
             </p>
 
             <div class="fade-up delay-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="/App/Modules/Dashboard/dashboard.php"
+                <a href="dashboard.php"
                     class="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all hover:scale-105 active:scale-95">
                     Acceder al sistema
                 </a>
@@ -406,7 +406,7 @@
                             <span class="mono text-indigo-300">docker compose up</span>
                         </div>
                     </div>
-                    <a href="/App/Modules/Dashboard/dashboard.php"
+                    <a href="dashboard.php"
                         class="mt-6 block text-center px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-all hover:scale-105 active:scale-95">
                         Ingresar →
                     </a>

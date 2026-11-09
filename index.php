@@ -1,4 +1,4 @@
 <?php
-header('Location: /App/Modules/Dashboard/landing.php');
+header('Location: App/Modules/Dashboard/landing.php');
 exit;
 ?>
