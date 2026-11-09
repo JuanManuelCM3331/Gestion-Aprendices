@@ -1,4 +1,3 @@
 <?php
-header('Location: /App/Modules/Dashboard/landing.php');
+header('Location: public/');
 exit;
-?>

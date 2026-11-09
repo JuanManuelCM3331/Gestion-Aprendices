@@ -1,25 +1,25 @@
-﻿# Ignore secrets and local environment overrides
-.env
-.env.*
-
-# Dependencies
+# Dependencias de Composer
 /vendor/
 
-# Logs and cache
-*.log
-/logs/
-/tmp/
-/cache/
+# Configuración de entorno local
+.env
+.env.backup
+.env.production
 
-# IDEs and editors
-.idea/
-.vscode/
-*.swp
+# Archivos generados por Laravel en ejecución
+/public/storage
+/storage/*.key
+/storage/logs/*.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*.php
+/bootstrap/cache/*.php
 
-# OS artifacts
+# Caché de pruebas y sistema operativo
+.phpunit.result.cache
+/.phpunit.cache
 .DS_Store
 Thumbs.db
-
-# Docker
-docker-compose.override.yml
-.dockerignore
+/.idea
+/.vscode
