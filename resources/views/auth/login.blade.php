@@ -9,14 +9,24 @@
     <style>
         body { font-family: 'DM Sans', sans-serif; }
         .mono { font-family: 'DM Mono', monospace; }
+        @keyframes cardEnter {
+            from { opacity: 0; transform: scale(0.96) translateY(12px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .login-card { animation: cardEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+        @keyframes flashRing {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.6); }
+            100% { box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); }
+        }
+        .flash-input { animation: flashRing 0.45s ease-out; }
     </style>
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4">
 
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-8">
+    <div class="login-card w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-8">
         <!-- Header -->
         <div class="text-center mb-8">
-            <a href="{{ route('landing') }}" class="mx-auto mb-3 w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center text-lg font-bold shadow-lg shadow-indigo-500/25">
+            <a href="{{ route('landing') }}" class="mx-auto mb-3 w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center text-lg font-bold shadow-lg shadow-indigo-500/25 hover:scale-105 transition duration-200">
                 SGA
             </a>
             <h1 class="text-2xl font-bold text-white">Iniciar Sesión</h1>
@@ -40,7 +50,7 @@
                        value="{{ old('identifier') }}"
                        placeholder="Ingresa tu usuario"
                        required
-                       class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
             </div>
 
             <div>
@@ -50,11 +60,11 @@
                        type="password"
                        placeholder="Ingresa tu contraseña"
                        required
-                       class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
             </div>
 
             <button type="submit"
-                    class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-lg shadow-indigo-600/20 transition cursor-pointer">
+                    class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-lg shadow-indigo-600/20 transition duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer">
                 Entrar al sistema
             </button>
         </form>
@@ -64,22 +74,22 @@
             <p class="mono text-xs text-slate-400 uppercase tracking-wider mb-3">Acceso rápido de prueba</p>
             <div class="grid grid-cols-2 gap-2">
                 <button type="button" onclick="fillRole('bienestar', 'bienestar123')"
-                        class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-teal-500/50 text-left transition cursor-pointer">
+                        class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-teal-500/60 hover:-translate-y-0.5 active:scale-95 text-left transition duration-200 cursor-pointer">
                     <span class="block text-xs font-bold text-teal-300">Bienestar</span>
                     <span class="mono block text-[11px] text-slate-500">bienestar / bienestar123</span>
                 </button>
                 <button type="button" onclick="fillRole('instructor1', '123')"
-                        class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/50 text-left transition cursor-pointer">
+                        class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/60 hover:-translate-y-0.5 active:scale-95 text-left transition duration-200 cursor-pointer">
                     <span class="block text-xs font-bold text-indigo-300">Instructor</span>
                     <span class="mono block text-[11px] text-slate-500">instructor1 / 123</span>
                 </button>
                 <button type="button" onclick="fillRole('admin', 'admin123')"
-                        class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-rose-500/50 text-left transition cursor-pointer">
+                        class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-rose-500/60 hover:-translate-y-0.5 active:scale-95 text-left transition duration-200 cursor-pointer">
                     <span class="block text-xs font-bold text-rose-300">Administrador</span>
                     <span class="mono block text-[11px] text-slate-500">admin / admin123</span>
                 </button>
                 <button type="button" onclick="fillRole('aprendiz1', '123')"
-                        class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 text-left transition cursor-pointer">
+                        class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/60 hover:-translate-y-0.5 active:scale-95 text-left transition duration-200 cursor-pointer">
                     <span class="block text-xs font-bold text-amber-300">Aprendiz</span>
                     <span class="mono block text-[11px] text-slate-500">aprendiz1 / 123</span>
                 </button>
@@ -89,8 +99,13 @@
 
     <script>
         function fillRole(user, pass) {
-            document.getElementById('login-identifier').value = user;
-            document.getElementById('login-password').value = pass;
+            const u = document.getElementById('login-identifier');
+            const p = document.getElementById('login-password');
+            u.value = user;
+            p.value = pass;
+            u.classList.remove('flash-input');
+            void u.offsetWidth;
+            u.classList.add('flash-input');
         }
     </script>
 </body>

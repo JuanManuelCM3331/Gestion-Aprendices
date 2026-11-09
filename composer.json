@@ -1,10 +1,10 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "juanmanuelcm3331/new-gestion-aprendices",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
-    "license": "MIT",
+    "description": "SGA — Sistema de Gestión y Seguimiento de Aprendices en Laravel 12 (MVC + Arquitectura en Capas).",
+    "keywords": ["sga", "aprendices", "bienestar", "laravel", "mvc"],
+    "license": "GPL-3.0-or-later",
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",

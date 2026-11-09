@@ -79,3 +79,8 @@ Luego abre `http://127.0.0.1:8000` (o desde Apache XAMPP en `http://localhost/Ne
 ```bash
 php artisan test
 ```
+
+## Historial de Versiones y Licencia
+
+- **Changelog:** Consulta el historial completo de versiones y commits en [CHANGELOG.md](CHANGELOG.md).
+- **Licencia:** Este proyecto se distribuye bajo la licencia **GNU General Public License v3.0 (GPLv3)** — Copyright (C) 2026 **Juan Manuel Cardona Molina y colaboradores del proyecto**. Consulta el archivo [LICENSE](LICENSE) para más detalles.

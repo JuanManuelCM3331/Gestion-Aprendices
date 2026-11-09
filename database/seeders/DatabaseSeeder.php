@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        if (User::count() > 0) {
+            return;
+        }
+
         // 1. Usuarios Principales (Los 4 roles del sistema)
         $admin = User::create([
             'name' => 'Juan Manuel Cardona Molina',
