@@ -13,12 +13,15 @@ jobs:
       - name: Descargar repositorio
         uses: actions/checkout@v4
 
-      - name: Verificar estructura del proyecto
+      - name: Verificar estructura del proyecto Laravel MVC + Capas
         run: |
           test -f README.md
           test -f Dockerfile
           test -f docker-compose.yml
-          test -d App
+          test -f artisan
+          test -d app/Models
+          test -d app/Services
+          test -d app/Repositories
 
       - name: Confirmar CI
         run: echo "La validacion CI fue exitosa"

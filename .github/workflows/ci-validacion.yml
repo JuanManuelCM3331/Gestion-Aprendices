@@ -17,12 +17,15 @@ jobs:
       - name: Listar archivos del proyecto
         run: ls -la
 
-      - name: Verificar que existan archivos clave
+      - name: Verificar que existan archivos clave de Laravel y Docker
         run: |
           test -f README.md
           test -f Dockerfile
           test -f docker-compose.yml
-          test -d App
+          test -f artisan
+          test -d app/Models
+          test -d app/Services
+          test -d app/Repositories
 
       - name: Confirmar validacion
-        run: echo "Validacion basica ejecutada correctamente"
+        run: echo "Validacion de arquitectura Laravel MVC + Capas ejecutada correctamente"
